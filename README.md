@@ -7,3 +7,4 @@ Everything is under development.
 1. For sure there is MongoDB needed
 2. npm start
 3. I`v used c9 (Cloud9) IDE
+4. to instal mongo db paste: sudo apt-get install -y mongodb-org
