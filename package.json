@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/kamilkodzi/fakeParties/issues"
   },
-  "homepage": "https://github.com/kamilkodzi/fakeParties#readme"
+  "homepage": "https://github.com/kamilkodzi/fakeParties#readme",
+  "dependencies": {
+    "express": "^4.16.3"
+  }
 }
