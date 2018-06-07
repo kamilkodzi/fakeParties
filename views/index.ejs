@@ -1,6 +1,63 @@
 <% include ./partials/header %>
 
-<h1>Witajcie</h1>
+    <!--<div class="row d-none d-sm-block">-->
+    <!--    <div id="carouselSlides" class="carousel slide" data-ride="carousel">-->
+    <!--      <div class="carousel-inner">-->
+    <!--        <div class="carousel-item active" style="">-->
+    <!--          <img class="d-block w-100" src="img/caruselSlide/carusel1.jpg" alt="First slide">-->
+    <!--        </div>-->
+    <!--        <div class="carousel-item">-->
+    <!--          <img class="d-block w-100" src="img/caruselSlide/carusel2.jpg" alt="Second slide">-->
+    <!--        </div>-->
+    <!--        <div class="carousel-item">-->
+    <!--          <img class="d-block w-100" src="img/caruselSlide/carusel3.jpg" alt="Third slide">-->
+    <!--        </div>-->
+    <!--      </div>-->
+    <!--    </div>-->
+    <!--</div>-->
+    
+<div class="container">
+    
+<div class="row">
+    <div class="col jumbotron mt-1">
+      <h1 class="display-4">Best events over the World!</h1>
+      <p>It never was so easy. Type what bring you joy and we`ll find it!</p>
+    <div class="row">
+        <form class="col">
+        <div class="form-group">
+          <div class="input-group">
+            <input type="text" class="col-md-6 col-sm-12 form-control" placeholder="Parties or categories">
+            <input type="text" class="col-md-3 form-control d-none d-sm-block" placeholder="City or location">
+            <input type="text" class="col-md-3 form-control d-none d-sm-block" placeholder="Date">
+            <div class="input-group-append">
+              <span class="input-group-text">Find</span>
+            </div>
+          </div>
+        </div> 
+        </form>
+    </div>
+    </div>  
+</div>
+
+
+    
+    <div class="row mt-3">
+        <% events.forEach(function(events){ %>
+         <div class="col-md-4 mb-2">
+           <a href="/event/<%=events._id%>">
+            <div class="card bg-dark text-white">
+              <img class="card-img" src="<%= events.image %>" alt="image">
+              <div class="card-img-overlay">
+                <h5 class="card-title text-center font-weight-bold"><%= events.name %></h5>
+                <p class="card-text text-justify"><%= events.description.substr(0,80) %> . . .</p>
+              </div>
+            </div>
+            </a>
+         </div>
+        <% }); %> 
+    </div>
+</div>
+
 
 
 <% include ./partials/footer %>
