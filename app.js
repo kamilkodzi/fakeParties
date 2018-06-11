@@ -3,7 +3,10 @@ const   express         =   require('express'),
         mongoose        =   require('mongoose'),
         User            =   require('./models/user'),
         Event           =   require('./models/event'),
-        Category        =   require('./models/category');
+        Category        =   require('./models/category'),
+        passport        =   require('passport'),
+        LocalStrategy   =   require('passport-local'),
+        methodOverride  =   require("method-override");
 
 const   indexRoutes     =   require('./routes/index') 
 const   eventsRoutes    =   require('./routes/events')
@@ -24,6 +27,8 @@ app.set("view engine","ejs");
 app.use(express.static(__dirname+"/public"));
  
 app.use(indexRoutes);
+app.use("/events" ,eventsRoutes);
+ 
  
 app.listen(process.env.PORT,process.env.IP,function(){
     console.log('fakeServer has started');

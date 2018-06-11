@@ -9,7 +9,7 @@ router.get('/',function(req,res){
     } else{
           res.render("index",{events:topEvents});
     }
-  });   
+  }).sort({_id:1}).limit(6);   
 });
 
 router.get('/login',function(req,res){
