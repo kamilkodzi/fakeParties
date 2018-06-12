@@ -1,0 +1,36 @@
+<% include ../partials/header %>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card">
+                <h1 class="card-title text-center"><%= user.firstName + " " + user.lastName %></h1>
+                <div class="card-body">
+                   
+                   <a clas="card-link" href=""><%=user.email%></a>
+                   <p class="card-text">
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis similique laudantium libero magnam aspernatur odit, blanditiis in ducimus, esse non quae minus dolores odio aliquid culpa ea qui. Rerum, a.
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis similique laudantium libero magnam aspernatur odit, blanditiis in ducimus, esse non quae minus dolores odio aliquid culpa ea qui. Rerum, a.
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis similique laudantium libero magnam aspernatur odit, blanditiis in ducimus, esse non quae minus dolores odio aliquid culpa ea qui. Rerum, a.
+                   </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-8">
+
+            <div class="list-group">
+             <% campgrounds.forEach(function(campground){ %>    
+              <a href="/campgrounds/<%= campground.id%>" class="list-group-item list-group-item-action flex-column align-items-start">
+                <div class="d-flex w-100 justify-content-between">
+                  <h5 class="mb-1"><%= campground.name%></h5>
+                  <small> <%= moment(campground.createdAt).fromNow() %></small>
+                </div>
+                <p class="mb-1"><%= campground.description.substr(0,100) %></p>
+              </a>
+              <%});%> 
+            </div>
+        </div> 
+</div>
+
+<% include ../partials/footer %>

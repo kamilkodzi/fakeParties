@@ -1,34 +1,50 @@
-const   express         =   require('express'),
-        app             =   express(),
-        mongoose        =   require('mongoose'),
-        User            =   require('./models/user'),
-        Event           =   require('./models/event'),
-        Category        =   require('./models/category'),
-        passport        =   require('passport'),
-        LocalStrategy   =   require('passport-local'),
-        methodOverride  =   require("method-override");
-
-const   indexRoutes     =   require('./routes/index') 
-const   eventsRoutes    =   require('./routes/events')
+const   express                 =require('express'),
+        app                     =express(),
+        mongoose                =require('mongoose'),
+        User                    =require('./models/user'),
+        Event                   =require('./models/event'),
+        Category                =require('./models/category'),
+        passport                =require('passport'),
+        LocalStrategy           =require('passport-local'),
+        passportLocalMongoose   =require('passport-local-mongoose'),
+        methodOverride          =require('method-override'),
+        bodyParser              =require('body-parser'),
+        flash                   =require('connect-flash-plus'),
+        session                 =require('express-session');
+        
+const   indexRoutes             =require('./routes/index'),
+        eventsRoutes            =require('./routes/events');
 
 mongoose.connect('mongodb://localhost/fake1');
-
 app.set("view engine","ejs");
-// Event.create({
-//         name: 'Urodziny Kamila',
-//         description:'Niezapomniana impreza urodzinowa na rodzinnych ogrodkach działkowych',
-//         organizer: 'Kamil A',
-//         location: 'Gliwice',
-//         startDay:new Date(2018, 06, 10),
-//         endDay:new Date(2018, 06, 11),
-//         image: 'https://images.unsplash.com/photo-1493151920995-56c5a400e6d0?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=894ecbdb65911e692a58d962e92b071a&auto=format&fit=crop&w=1650&q=80',
-//         cathegory: 'Zabawy',
-// });
 app.use(express.static(__dirname+"/public"));
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(methodOverride("_method"));
+ 
+//PASSPORT CONFIGURATION
+app.use(session({ 
+    secret: 'kamilkodzisecret', 
+    resave: false, 
+    saveUninitialized: false ,
+    cookie: { maxAge: 60000 }
+}));
+
+app.use(flash());
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+ 
+app.use(function(req,res,next){
+    res.locals.currentUser=req.user;
+    res.locals.error=req.flash("error");
+    res.locals.success=req.flash("success");
+    next();
+});
  
 app.use(indexRoutes);
 app.use("/events" ,eventsRoutes);
- 
  
 app.listen(process.env.PORT,process.env.IP,function(){
     console.log('fakeServer has started');
