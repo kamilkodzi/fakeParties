@@ -10,26 +10,34 @@ const   express                 =require('express'),
         methodOverride          =require('method-override'),
         bodyParser              =require('body-parser'),
         flash                   =require('connect-flash-plus'),
-        session                 =require('express-session');
+        session                 =require('express-session'),
+        moment                  =require('moment'),
+        where                   =require('node-where'),
+        seedDB                  =require('./seed.js');
         
 const   indexRoutes             =require('./routes/index'),
         eventsRoutes            =require('./routes/events');
+        
 
-mongoose.connect('mongodb://localhost/fake1');
+app.locals.moment=moment;
+mongoose.connect('mongodb://localhost/fake2');
 app.set("view engine","ejs");
 app.use(express.static(__dirname+"/public"));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(methodOverride("_method"));
- 
+
+// seedDB();
+
 //PASSPORT CONFIGURATION
 app.use(session({ 
     secret: 'kamilkodzisecret', 
     resave: false, 
     saveUninitialized: false ,
-    cookie: { maxAge: 60000 }
+    cookie: { maxAge: 365 * 24 * 60 * 60 * 1000 }
 }));
 
 app.use(flash());
+
 app.use(passport.initialize());
 app.use(passport.session());
 passport.use(new LocalStrategy(User.authenticate()));
@@ -41,6 +49,13 @@ app.use(function(req,res,next){
     res.locals.error=req.flash("error");
     res.locals.success=req.flash("success");
     next();
+});
+
+app.use(function(req, res, next) {
+  where.is(req.ip, function(err, result) {
+    req.geoip = result;
+    next();
+  });
 });
  
 app.use(indexRoutes);
