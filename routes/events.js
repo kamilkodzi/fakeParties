@@ -59,7 +59,6 @@ router.get('/:id/edit',middleware.checkEventOwnership,(req,res)=>{
             if(err){
                 req.redirect('/');
             }else{
-                console.log(foundCategories);
              res.render('events/edit',{event:foundEvent,categories:foundCategories});   
             }
         });        
@@ -82,27 +81,62 @@ router.post('/', middleware.isLoggedIn,(req,res)=>{
             author={
                 id: req.user._id,
                 username:req.user.username};
-
-    const newEvent={name: name, image:image,description:desc, author:author, location:location,category:category,dateFrom:dateFrom,dateTo:dateTo};
-        Event.create(newEvent,(err,newlyCreated)=>{
-           if(err){
-               res.redirect('/');
-           } else{
-              res.redirect('/events/'+newlyCreated.id); 
-           }
+        
+        geocoder.geocode(req.body.location, function (err, data) {
+        if (err || !data.length) {
+            req.flash('error', 'Invalid address');
+            return res.redirect('back');
+        }        
+            const lat       = data[0].latitude,
+                  lng       = data[0].longitude,
+                  location  = data[0].formattedAddress;
+            const newEvent={name: name, image:image,description:desc, author:author, location:location,lat: lat, lng: lng,category:category,dateFrom:dateFrom,dateTo:dateTo};
+              
+            Event.create(newEvent,(err,newlyCreated)=>{
+                if(err){
+                    res.redirect('/');
+                }else{
+                    res.redirect('/events/'+newlyCreated.id); 
+                }
+            });
         });
     });
 });
 
-// Update
-router.put('/:id',(req,res)=>{
-    Event.findByIdAndUpdate(req.params.id,req.body.event,(err,updatedEvent)=>{
-      if(err){
-          res.redirect('/');
-      }else{
-          res.redirect('/events/'+req.params.id);
-      }
+// // Update
+// router.put('/:id',(req,res)=>{
+//     Event.findByIdAndUpdate(req.params.id,req.body.event,(err,updatedEvent)=>{
+//       if(err){
+//           res.redirect('/');
+//       }else{
+//           res.redirect('/events/'+req.params.id);
+//       }
+//     });
+// });
+
+
+// UPDATE CAMPGROUND ROUTE
+router.put("/:id", middleware.checkEventOwnership, function(req, res){
+  geocoder.geocode(req.body.location, function (err, data) {
+      console.log(data);
+    if (err || !data.length) {
+      req.flash('error', 'Invalid address');
+      return res.redirect('back');
+    }
+    req.body.event.lat = data[0].latitude;
+    req.body.event.lng = data[0].longitude;
+    req.body.event.location = data[0].formattedAddress;
+
+    Event.findByIdAndUpdate(req.params.id, req.body.event, function(err, foundEvent){
+        if(err){
+            req.flash("error", err.message);
+            res.redirect("back");
+        } else {
+            req.flash("success","Successfully Updated!");
+            res.redirect("/events/" + foundEvent._id);
+        }
     });
+  });
 });
 
 // Destroy

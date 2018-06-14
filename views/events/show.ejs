@@ -33,8 +33,10 @@
     </div>
 </div>
 
+
+
 <script>
-  function initMap() {
+function initMap() {
     var lat = <%= event.lat %>;
     var lng = <%= event.lng %>;
     var center = {lat: lat, lng: lng };
@@ -60,7 +62,5 @@
     });
   }
 </script>
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBPFj-mGrFrz2EVQwKZFTDGi1PZ7dwDqUE&callback=initMap"></script>
-
-
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBPFj-mGrFrz2EVQwKZFTDGi1PZ7dwDqUE&callback=initMap" async defer></script>
 <% include ../partials/footer %>
