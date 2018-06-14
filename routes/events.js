@@ -17,15 +17,16 @@ const options = {
 const geocoder = NodeGeocoder(options);
 
 
-router.get('/',(req,res)=>{
-  Event.find({},(err,foundEvents)=>{
-    if(err){
-        res.render('login');
-    } else{
-        res.render('events/index',{events:foundEvents});
-    }
-  }).sort({_id:-1});
-});
+
+// router.get('/',(req,res)=>{
+//   Event.find({},(err,foundEvents)=>{
+//     if(err){
+//         res.render('login');
+//     } else{
+//         res.render('events/index',{events:foundEvents});
+//     }
+//   }).sort({_id:-1});
+// });
 
 // New
 router.get('/new',middleware.isLoggedIn,(req,res)=>{
@@ -39,6 +40,7 @@ router.get('/new',middleware.isLoggedIn,(req,res)=>{
     });
     
 });
+
 
 // Show
 router.get('/:id',(req,res)=>{
@@ -75,9 +77,7 @@ router.post('/', middleware.isLoggedIn,(req,res)=>{
             desc        = req.body.description,
             dateFrom    = req.body.dateFrom,
             dateTo      = req.body.dateTo,
-            category={
-                id:req.body.category,
-                categoryName: foundCategory.categoryName},
+            category    = foundCategory.categoryName,
             author={
                 id: req.user._id,
                 username:req.user.username};
@@ -118,7 +118,6 @@ router.post('/', middleware.isLoggedIn,(req,res)=>{
 // UPDATE CAMPGROUND ROUTE
 router.put("/:id", middleware.checkEventOwnership, function(req, res){
   geocoder.geocode(req.body.location, function (err, data) {
-      console.log(data);
     if (err || !data.length) {
       req.flash('error', 'Invalid address');
       return res.redirect('back');

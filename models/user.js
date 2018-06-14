@@ -8,7 +8,7 @@ const   UserSchema= new mongoose.Schema({
         lastName: String,
         email: String,
         createdAt:{type:Date,default:Date.now},
-        isAdmin:{type: Boolean, default:false}
+        isAdmin:{type: Boolean, default:true}
 });
 
 UserSchema.plugin(passportLocalMongoose);

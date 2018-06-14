@@ -2,17 +2,20 @@ const   express     = require('express'),
         router      = express.Router(),
         passport    = require('passport'),
         Events      = require('../models/event'),
+        Category    = require('../models/category'),
         User        = require('../models/user');
 
 // Show main index page
 router.get('/',(req,res)=>{
-  Events.find({},(err,topEvents)=>{
-    if(err){
-        res.render('login');
-    } else{
-        res.render("index",{events:topEvents});
-    }
-  }).sort({_id:1}).limit(6);
+  Category.find({},(err,foundCategories)=>{
+    Events.find({},(err,topEvents)=>{
+      if(err){
+          res.render('login');
+      } else{
+          res.render("index",{events:topEvents,category:foundCategories});
+      }
+    }).sort({_id:1}).limit(6);
+  });
 });
 
 // Show login form

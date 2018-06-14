@@ -38,8 +38,6 @@
     </div>
     </div>  
 </div>
-
-
     
     <div class="row mt-3">
         <% events.forEach(function(events){ %>
@@ -53,6 +51,22 @@
               </div>
             </div>
             </a>
+         </div>
+        <% }); %> 
+    </div>
+</div>
+
+    <div class="row mt-3">
+        <% category.forEach(function(category){ %>
+         <div class="col-md-4 mb-2">
+           
+            <div class="card bg-dark text-white">
+              <img class="card-img" src="<%= category.imgUrl %>" alt="image">
+              <div class="card-img-overlay">
+                <h5 class="card-title text-center font-weight-bold"><%= category.categoryName %></h5>
+              </div>
+            </div>
+            
          </div>
         <% }); %> 
     </div>

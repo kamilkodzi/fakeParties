@@ -10,10 +10,7 @@ const EventSchema= new mongoose.Schema({
       dateTo:{type:Date},
       image: String,
       createdAt:{type:Date,default:Date.now},
-      category:{
-        id:{
-        type: mongoose.Schema.Types.ObjectId,
-        ref:"Category"},categoryName:String},
+      category:String,
       author: {
         id:{
         type: mongoose.Schema.Types.ObjectId,
