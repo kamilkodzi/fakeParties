@@ -7,36 +7,35 @@
             <div>
                 <form action="/events" method="POST">
                     <div class="form-group">
-                        <input class="form-control" type="text" name="author" value="<%=currentUser.username%>" disabled>
+                        <input class="form-control" type="text" name="name" placeholder="Enter new event name" required>
                     </div>
-                    <div class="form-group">
-                        <input class="form-control" type="text" name="name" placeholder="Enter new event name">
-                    </div>
-                    
                     <div class="form-group">
                         <label for="category">Category:</label>
-                        <select class="form-control" id="category" name="category">
+                        <select class="form-control" id="category" name="category" required>
                         <%categories.forEach(function(category){%>
                           <option value="<%=category.id%>"><%=category.categoryName%></option>
                         <%});%>
                         </select>
                     </div>
-                    
-                      <div class="form-group">
-                        <input class="form-control" type="text" name="location" placeholder="Location" value="<%=geoip.city%>">
+                    <div class="form-group">
+                        <input class="form-control" type="text" name="location" placeholder="Location" value="<%= %>" required>
                     </div>
                     <div class="form-group">
-                        <input class="form-control" type="date" name="dateFrom" placeholder="Event begin at" min="<%=moment().format("YYYY-MM-DD")%>" value="<%=moment().format("YYYY-MM-DD")%>">
+                        <input class="form-control" type="date" name="dateFrom" placeholder="Event begin at" min="<%=moment().format("YYYY-MM-DD")%>" value="<%=moment().format("YYYY-MM-DD")%>" required>
                     </div>
                     <div class="form-group">
-                        <input class="form-control" type="date" name="dateTo" placeholder="Event ends at (day)" min="<%=moment().format("YYYY-MM-DD")%>" value="<%=moment().add(1,'days').format("YYYY-MM-DD")%>">
+                        <input class="form-control" type="date" name="dateTo" placeholder="Event ends at (day)" min="<%=moment().format("YYYY-MM-DD")%>" value="<%=moment().add(1,'days').format("YYYY-MM-DD")%>" required>
                     </div>
                     <div class="form-group">
-                        <input class="form-control" type="text" name="image" placeholder="Image url">
+                        <input class="form-control" type="text" name="image" placeholder="Image url" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="image">Image</label>
+                        <input type="file" id="image" name="image2" accept="image/*">
                     </div>
                     <div class="form-group">
                         <label for="description">Description</label>
-                        <textarea class="form-control" id="description" name="description" rows="3" placeholder="Something about your event..."></textarea>
+                        <textarea class="form-control" id="description" name="description" rows="3" placeholder="Something about your event..." required></textarea>
                     </div>
                     <div class="form-group">
                         <button class="btn btn-md btn-primary btn-block">Submitt!</button>

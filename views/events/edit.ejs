@@ -7,16 +7,35 @@
             <div>
                 <form action="/events/<%= event._id %>?_method=PUT" method="POST">
                     <div class="form-group">
-                        <input class="form-control" type="text" name="event[name]" value="<%= event.name %>">
+                        <input class="form-control" type="text" name="event[name]" placeholder="Enter new event name" value="<%= event.name %>">
                     </div>
                     <div class="form-group">
-                        <input class="form-control" type="number" name="event[price]" value="<%= event.price %>">
+                        <label for="category">Category:</label>
+                        <select class="form-control" id="event[category]" name="category">
+                        <% categories.forEach(function(category){ %>
+                          <% if(category.categoryName===event.category.categoryName){ %>
+                            <option value="<%=category.id%>" selected><%=category.categoryName%></option>
+                          <% }else{%>
+                            <option value="<%=category.id%>"><%=category.categoryName%></option>
+                          <% } %>
+                        <% });%>
+                        </select>
                     </div>
                     <div class="form-group">
-                        <input class="form-control" type="text" name="event[image]" value="<%= event.image %>">
+                        <input class="form-control" type="text" name="event[location]" placeholder="Location" value="<%= event.location %>">
                     </div>
                     <div class="form-group">
-                        <input class="form-control" type="text" name="event[description]" value="<%= event.description %>">
+                        <input class="form-control" type="date" name="event[dateFrom]" placeholder="Event begin at" min="<%=moment().format("YYYY-MM-DD")%>" value="<%= moment(event.dateFrom).format("YYYY-MM-DD") %>">
+                    </div>
+                    <div class="form-group">
+                        <input class="form-control" type="date" name="event[dateTo]" placeholder="Event ends at (day)" min="<%=moment().format("YYYY-MM-DD")%>" value="<%= moment(event.dateTo).format("YYYY-MM-DD") %>">
+                    </div>
+                    <div class="form-group">
+                        <input class="form-control" type="text" name="event[image]" placeholder="Image url" value="<%= event.image %>">
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <textarea class="form-control" id="description" name="event[description]" rows="3" placeholder="Something about your event..."><%= event.description %></textarea>
                     </div>
                     <div class="form-group">
                         <button class="btn btn-md btn-primary btn-block">Submitt!</button>

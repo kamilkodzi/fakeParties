@@ -9,19 +9,16 @@
                 <li class="list-group-item">Info 2</li>
                 <li class="list-group-item">Info 3</li>
             </div>
+            <div id="map"></div>
         </div>
         <div class="col-md-9">
             <div class="card">
                 <img class="card-img-top" src="<%=event.image%>">
                 <div class="card-body">
-                    <h4 class="card-title d-inline-block"><a href="#"><%= event.name %></a></h4> 
-                    <h4 class="card-title d-inline-block">Party from: <%=event.dateFrom%> up to: <%=event.dateTo%></h4>
+                    <h4 class="card-title d-inline-block"><a href="/events/<%= event.id%>"><%=event.name %></a></h4> 
+                    <h4 class="card-title d-inline-block"><%=moment(event.dateFrom).format("ddd, MMMM D, YYYY")%></h4>
                     <p class="card-text"><%=event.description%></p>
-                    
                     <p class="font-italic card-text">Submitted By <a href="/users/<%= event.author.id %>"><%= event.author.username %></a>, <%= moment(event.createdAt).fromNow() %></p>
-                    
-                        
-                    
                     <% if(currentUser && event.author.id.equals(currentUser._id)|| currentUser && currentUser.isAdmin){ %>
                     <div class="row mx-1">
                         <a class="btn btn-warning m-1" href="/events/<%= event._id %>/edit">Edit</a>
@@ -35,6 +32,35 @@
         </div>
     </div>
 </div>
+
+<script>
+  function initMap() {
+    var lat = <%= event.lat %>;
+    var lng = <%= event.lng %>;
+    var center = {lat: lat, lng: lng };
+    var map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 8,
+        center: center,
+        scrollwheel: false
+    });
+    var contentString = `
+      <strong><%= event.name %><br />
+      <%= event.location %></strong>
+      <p><%= event.description %></p>
+    `
+    var infowindow = new google.maps.InfoWindow({
+      content: contentString
+    });
+    var marker = new google.maps.Marker({
+        position: center,
+        map: map
+    });
+    marker.addListener('click', function() {
+      infowindow.open(map, marker);
+    });
+  }
+</script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBPFj-mGrFrz2EVQwKZFTDGi1PZ7dwDqUE&callback=initMap"></script>
 
 
 <% include ../partials/footer %>

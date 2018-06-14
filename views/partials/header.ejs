@@ -8,6 +8,7 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
     <link rel="stylesheet" href="https://bootswatch.com/4/spacelab/bootstrap.min.css">
+    <link rel="stylesheet" href="/stylesheets/main.css">
     <title>FineParties</title>
   </head>
   <body>
@@ -41,15 +42,14 @@
      </div>
  </div>
 </nav>
-<div class="container">
-    <% if(error && error.length>0) { %>
-        <div class="alert alert-danger" role="alert">
+
+<% if(error && error.length>0) { %>
+        <div class="alert alert-danger mb-0" role="alert">
           <%= error %>
         </div>
     <% } %>
     <% if(success && success.length>0) { %>
-    <div class="alert alert-success" role="alert">
-      <%= success %>
-    </div>
-    <% } %>
-</div>
+        <div class="alert alert-success mb-0" role="alert">
+          <%= success %>
+        </div>  
+<% } %>

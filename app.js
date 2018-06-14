@@ -12,7 +12,6 @@ const   express                 =require('express'),
         flash                   =require('connect-flash-plus'),
         session                 =require('express-session'),
         moment                  =require('moment'),
-        where                   =require('node-where'),
         seedDB                  =require('./seed.js');
         
 const   indexRoutes             =require('./routes/index'),
@@ -51,12 +50,12 @@ app.use(function(req,res,next){
     next();
 });
 
-app.use(function(req, res, next) {
-  where.is(req.ip, function(err, result) {
-    req.geoip = result;
-    next();
-  });
-});
+// app.use(function(req, res, next) {
+//   where.is(req.ip, function(err, result) {
+//     req.geoip = result;
+//     next();
+//   });
+// });
  
 app.use(indexRoutes);
 app.use("/events" ,eventsRoutes);

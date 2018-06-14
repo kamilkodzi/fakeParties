@@ -4,6 +4,19 @@ const   express     = require('express'),
         Event       = require('../models/event'),
         Category    = require('../models/category');
 
+
+const NodeGeocoder = require('node-geocoder');
+ 
+const options = {
+  provider: 'google',
+  httpAdapter: 'https',
+  apiKey: process.env.GEOCODER_API_KEY,
+  formatter: null
+};
+ 
+const geocoder = NodeGeocoder(options);
+
+
 router.get('/',(req,res)=>{
   Event.find({},(err,foundEvents)=>{
     if(err){
@@ -20,7 +33,8 @@ router.get('/new',middleware.isLoggedIn,(req,res)=>{
        if(err){
          res.render('/');
        }else{
-         res.render('events/new',{categories:foundCategories,geoip:req.geoip}); 
+         res.render('events/new',{categories:foundCategories}); 
+        //  geoip:req.geoip
        }
     });
     
@@ -40,13 +54,16 @@ router.get('/:id',(req,res)=>{
 
 // Edit
 router.get('/:id/edit',middleware.checkEventOwnership,(req,res)=>{
+    Category.find({},(err,foundCategories)=>{
         Event.findById(req.params.id,(err,foundEvent)=>{
             if(err){
                 req.redirect('/');
             }else{
-             res.render('events/edit',{event:foundEvent});   
+                console.log(foundCategories);
+             res.render('events/edit',{event:foundEvent,categories:foundCategories});   
             }
-        });
+        });        
+    });
 });
 
 // Create
@@ -66,7 +83,7 @@ router.post('/', middleware.isLoggedIn,(req,res)=>{
                 id: req.user._id,
                 username:req.user.username};
 
-    const newEvent={name: name, image:image,description:desc, author:author, locaton:location,category:category,dateFrom:dateFrom,dateTo:dateTo};
+    const newEvent={name: name, image:image,description:desc, author:author, location:location,category:category,dateFrom:dateFrom,dateTo:dateTo};
         Event.create(newEvent,(err,newlyCreated)=>{
            if(err){
                res.redirect('/');
