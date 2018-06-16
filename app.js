@@ -59,6 +59,8 @@ app.use(function(req,res,next){
 //   });
 // });
  
+
+ 
 app.use(indexRoutes);
 app.use("/show",searchRoutes);
 app.use("/events" ,eventsRoutes);
