@@ -18,10 +18,10 @@ const   express                 =require('express'),
 const   indexRoutes             =require('./routes/index'),
         eventsRoutes            =require('./routes/events'),
         searchRoutes            =require('./routes/show');
-        
+
 
 app.locals.moment=moment;
-mongoose.connect('mongodb://localhost/fake6');
+mongoose.connect('mongodb://localhost/fake7');
 app.set("view engine","ejs");
 app.use(express.static(__dirname+"/public"));
 app.use(bodyParser.urlencoded({extended: true}));
@@ -51,14 +51,6 @@ app.use(function(req,res,next){
     res.locals.success=req.flash("success");
     next();
 });
-
-// app.use(function(req, res, next) {
-//   where.is(req.ip, function(err, result) {
-//     req.geoip = result;
-//     next();
-//   });
-// });
- 
 
  
 app.use(indexRoutes);

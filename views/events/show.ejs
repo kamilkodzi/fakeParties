@@ -18,7 +18,7 @@
                     <h4 class="card-title d-inline-block"><a href="/events/<%= event.id%>"><%=event.name %></a></h4> 
                     <h4 class="card-title d-inline-block"><%=moment(event.dateFrom).format("ddd, MMMM D, YYYY")%></h4>
                     <p class="card-text"><%=event.description%></p>
-                    <p class="font-italic card-text">Submitted By <a href="/users/<%= event.author.id %>"><%= event.author.username %></a>, <%= moment(event.createdAt).fromNow() %></p>
+                    <p class="font-italic card-text">Organised By <a href="/users/<%= event.author.id %>"><%= event.author.username %></a>, starts <%= moment(event.dateFrom).endOf('day').fromNow() %></p>
                     <% if(currentUser && event.author.id.equals(currentUser._id)|| currentUser && currentUser.isAdmin){ %>
                     <div class="row mx-1">
                         <a class="btn btn-warning m-1" href="/events/<%= event._id %>/edit">Edit</a>
@@ -37,8 +37,8 @@
 
 <script>
 function initMap() {
-    var lat = <%= event.lat %>;s
-    var lng = <%= event.lng %>;
+    var lat = <%= event.geometry.coordinates[1] %>;
+    var lng = <%= event.geometry.coordinates[0] %>;
     var center = {lat: lat, lng: lng };
     var map = new google.maps.Map(document.getElementById('map'), {
         zoom: 8,

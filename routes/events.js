@@ -2,20 +2,31 @@ const   express     = require('express'),
         router      = express.Router(),
         middleware  = require('../middleware'),
         Event       = require('../models/event'),
-        Category    = require('../models/category');
-
-
-const NodeGeocoder = require('node-geocoder');
+        Category    = require('../models/category'),
+        multer      = require('multer'),
+        cloudinary  = require('cloudinary'),
+        NodeGeocoder= require('node-geocoder');
  
-const options = {
-  provider: 'google',
-  httpAdapter: 'https',
-  apiKey: process.env.GEOCODER_API_KEY,
-  formatter: null
-};
- 
-const geocoder = NodeGeocoder(options);
+const   options = {
+        provider: 'google',
+        httpAdapter: 'https',
+        apiKey: process.env.GEOCODER_API_KEY,
+        formatter: null},
+        geocoder = NodeGeocoder(options);
 
+const   imageFilter = function (req, file, cb) {
+        // accept image files only
+            if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/i)) {
+                return cb(new Error('Only image files are allowed!'), false);
+            }
+        cb(null, true)},
+        upload = multer({fileFilter: imageFilter});
+        
+        cloudinary.config({ 
+        cloud_name: 'XXX',
+        api_key: "XXX", 
+        api_secret: "XXX"
+        });
 
 
 // router.get('/',(req,res)=>{
@@ -87,10 +98,13 @@ router.post('/', middleware.isLoggedIn,(req,res)=>{
             req.flash('error', 'Invalid address');
             return res.redirect('back');
         }        
-            const lat       = data[0].latitude,
-                  lng       = data[0].longitude,
-                  location  = data[0].formattedAddress;
-            const newEvent={name: name, image:image,description:desc, author:author, location:location,lat: lat, lng: lng,category:category,dateFrom:dateFrom,dateTo:dateTo};
+            const geometry= {
+                  type: 'Point',
+                  coordinates: [data[0].longitude, data[0].latitude]},
+                  location  = data[0].formattedAddress,
+                  locationCity=data[0].city;
+                  console.log(geometry);
+            const newEvent={name: name, image:image,description:desc, author:author,locationCity:locationCity, location:location,geometry:geometry,category:category,dateFrom:dateFrom,dateTo:dateTo};
               
             Event.create(newEvent,(err,newlyCreated)=>{
                 if(err){
@@ -122,8 +136,10 @@ router.put("/:id", middleware.checkEventOwnership, function(req, res){
       req.flash('error', 'Invalid address');
       return res.redirect('back');
     }
-    req.body.event.lat = data[0].latitude;
-    req.body.event.lng = data[0].longitude;
+    req.body.event.locationCity=data[0].city;
+    req.body.event.geometry= {
+        type: 'Point',
+        coordinates: [data[0].longitude, data[0].latitude]},
     req.body.event.location = data[0].formattedAddress;
 
     Event.findByIdAndUpdate(req.params.id, req.body.event, function(err, foundEvent){
