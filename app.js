@@ -19,9 +19,10 @@ const   indexRoutes             =require('./routes/index'),
         eventsRoutes            =require('./routes/events'),
         searchRoutes            =require('./routes/show');
 
+const   url=process.env.DATABASEURL || 'mongodb://localhost/fake7';
 
+mongoose.connect(url);
 app.locals.moment=moment;
-mongoose.connect('mongodb://localhost/fake7');
 app.set("view engine","ejs");
 app.use(express.static(__dirname+"/public"));
 app.use(bodyParser.urlencoded({extended: true}));

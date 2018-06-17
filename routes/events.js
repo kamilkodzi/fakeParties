@@ -5,8 +5,9 @@ const   express     = require('express'),
         Category    = require('../models/category'),
         multer      = require('multer'),
         cloudinary  = require('cloudinary'),
-        NodeGeocoder= require('node-geocoder');
- 
+        NodeGeocoder= require('node-geocoder'),
+        fs          = require('fs');
+        
 const   options = {
         provider: 'google',
         httpAdapter: 'https',
@@ -20,21 +21,23 @@ const   imageFilter = function (req, file, cb) {
                 return cb(new Error('Only image files are allowed!'), false);
             }
         cb(null, true)},
-        upload = multer({fileFilter: imageFilter});
         
-        cloudinary.config({ 
-        cloud_name: 'XXX',
-        api_key: "XXX", 
-        api_secret: "XXX"
-        });
-
+        storage = multer.diskStorage({
+          filename: function(req, file, callback) {
+            callback(null, Date.now() + file.originalname);
+          }
+        }),
+        
+        
+        
+        upload = multer({storage: storage, fileFilter: imageFilter});
 
 // router.get('/',(req,res)=>{
 //   Event.find({},(err,foundEvents)=>{
 //     if(err){
 //         res.render('login');
 //     } else{
-//         res.render('events/index',{events:foundEvents});
+//         res.render('events/index',{events:foundEvents,field1:'',field2:'',field3:''});
 //     }
 //   }).sort({_id:-1});
 // });
@@ -78,22 +81,21 @@ router.get('/:id/edit',middleware.checkEventOwnership,(req,res)=>{
     });
 });
 
-// Create
-router.post('/', middleware.isLoggedIn,(req,res)=>{
+// Create new Event
+router.post('/', middleware.isLoggedIn,upload.single('image'),(req,res)=>{
+    console.log(req.file.path);
     Category.findById(req.body.category,(err,foundCategory)=>{
-            const  
-            name        = req.body.name,
-            location    = req.body.location,
-            image       = req.body.image,
-            desc        = req.body.description,
-            dateFrom    = req.body.dateFrom,
-            dateTo      = req.body.dateTo,
-            category    = foundCategory.categoryName,
-            author={
-                id: req.user._id,
-                username:req.user.username};
-        
-        geocoder.geocode(req.body.location, function (err, data) {
+        const   name        = req.body.name,
+                // location    = req.body.location,
+                desc        = req.body.description,
+                dateFrom    = req.body.dateFrom,
+                dateTo      = req.body.dateTo,
+                category    = foundCategory.categoryName,
+                author={
+                    id: req.user._id,
+                    username:req.user.username};
+            
+        geocoder.geocode(req.body.location,(err, data)=> {
         if (err || !data.length) {
             req.flash('error', 'Invalid address');
             return res.redirect('back');
@@ -103,16 +105,31 @@ router.post('/', middleware.isLoggedIn,(req,res)=>{
                   coordinates: [data[0].longitude, data[0].latitude]},
                   location  = data[0].formattedAddress,
                   locationCity=data[0].city;
-                  console.log(geometry);
-            const newEvent={name: name, image:image,description:desc, author:author,locationCity:locationCity, location:location,geometry:geometry,category:category,dateFrom:dateFrom,dateTo:dateTo};
-              
-            Event.create(newEvent,(err,newlyCreated)=>{
-                if(err){
-                    res.redirect('/');
-                }else{
-                    res.redirect('/events/'+newlyCreated.id); 
-                }
-            });
+                  
+            cloudinary.uploader.upload(req.file.path,(result)=> {
+            const   image       = result.secure_url,
+                    cloudId     = result.public_id;
+            const   newEvent    ={name: name,
+                                  image:image,
+                                  cloudId:cloudId,
+                                  description:desc, 
+                                  author:author,
+                                  locationCity:locationCity, 
+                                  location:location,
+                                  geometry:geometry,
+                                  category:category,
+                                  dateFrom:dateFrom,
+                                  dateTo:dateTo};
+                                  
+                Event.create(newEvent,(err,newlyCreated)=>{
+                    if(err){
+                        res.redirect('/');
+                    }else{
+                        fs.unlinkSync(req.file.path);
+                        res.redirect('/events/'+newlyCreated.id); 
+                    }
+                });    
+            });  
         });
     });
 });

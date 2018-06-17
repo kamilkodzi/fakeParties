@@ -12,6 +12,7 @@ const EventSchema= new mongoose.Schema({
       dateFrom:{type:Date},
       dateTo:{type:Date},
       image: String,
+      cloudId:String,
       createdAt:{type:Date,default:Date.now},
       category:String,
       author: {
