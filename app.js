@@ -20,7 +20,7 @@ const   indexRoutes             =require('./routes/index'),
         eventsRoutes            =require('./routes/events'),
         searchRoutes            =require('./routes/show');
 
-const   url=process.env.DATABASEURL || 'mongodb://localhost/fake7';
+const   url=process.env.DATABASEURL|| 'mongodb://localhost/fake7';
 
 mongoose.connect(url);
 
