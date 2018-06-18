@@ -3,17 +3,17 @@ const   express                 =require('express'),
         app                     =express(),
         mongoose                =require('mongoose'),
         User                    =require('./models/user'),
-        Event                   =require('./models/event'),
-        Category                =require('./models/category'),
+        // Event                   =require('./models/event'),
+        // Category                =require('./models/category'),
         passport                =require('passport'),
         LocalStrategy           =require('passport-local'),
-        passportLocalMongoose   =require('passport-local-mongoose'),
+        // passportLocalMongoose   =require('passport-local-mongoose'),
         methodOverride          =require('method-override'),
         bodyParser              =require('body-parser'),
         flash                   =require('connect-flash-plus'),
         session                 =require('express-session'),
         moment                  =require('moment'),
-        seedDB                  =require('./seed.js'),
+        // seedDB                  =require('./seed.js'),
         cloudinary              =require('cloudinary').v2;
         
 const   indexRoutes             =require('./routes/index'),
@@ -61,6 +61,6 @@ app.use(indexRoutes);
 app.use("/show",searchRoutes);
 app.use("/events" ,eventsRoutes);
  
-app.listen(process.env.PORT || 4000,process.env.IP,function(){
+app.listen(process.env.PORT,process.env.IP,function(){
     console.log('fakeServer has started');
 });
