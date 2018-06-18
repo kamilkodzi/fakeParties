@@ -61,6 +61,6 @@ app.use(indexRoutes);
 app.use("/show",searchRoutes);
 app.use("/events" ,eventsRoutes);
  
-app.listen(process.env.PORT,process.env.IP,function(){
+app.listen(process.env.PORT || 3000,function(){
     console.log('fakeServer has started');
 });
