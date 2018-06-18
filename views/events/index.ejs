@@ -29,7 +29,7 @@
          <div class="col-md-4 mb-2 mx-auto event">
            <a href="/events/<%=events._id%>">
             <div class="card bg-dark text-white">
-            <%-cloudinary.image(events.cloudId, {width: 286, height: 180, crop: 'fill',quality: 80,format:'jpg',class:'card-img'})%>
+            <%-cloudinary.image(events.cloudId, {width: 572, height: 360, crop:"fill",quality: 80,html_width:null,html_height: null,class:'card-img'})%>
               <div class="card-img-overlay">
                 <h5 class="card-title text-center font-weight-bold"><%= events.name %></h5>
                 <p class="card-text text-justify">Event begin in <%= moment(events.dateFrom).endOf('day').fromNow() %> and they say: <span class="font-italic"><%= events.description.substr(0,80) %> . . .</span></p>
