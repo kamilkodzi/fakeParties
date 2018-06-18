@@ -3,6 +3,7 @@ const   express     = require('express'),
         passport    = require('passport'),
         Events      = require('../models/event'),
         Category    = require('../models/category'),
+        cloudinary  = require('cloudinary'),
         User        = require('../models/user');
 
 // Show main index page
@@ -14,7 +15,7 @@ router.get('/',(req,res)=>{
       } else{
           res.render("index",{events:topEvents,category:foundCategories});
       }
-    }).sort({_id:-1}).limit(6);
+    }).sort({_id:-1}).limit(9);
   });
 });
 

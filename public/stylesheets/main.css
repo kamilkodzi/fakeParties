@@ -14,6 +14,17 @@ html,body{
     color:#222;
 }
 
+.event h5{
+    /*font-size: 300%;*/
+    text-shadow:1px 1px 20px #000; 
+}
+
+.event p{
+    /*font-size: 100%;*/
+    text-shadow: 1px 1px 20px #000;
+    padding-bottom:1rem; 
+}
+
 .navbar{
     padding:.8rem;
 }
@@ -36,7 +47,7 @@ html,body{
 
 .carousel-caption{
     position: absolute;
-    top:50%;
+    top:45%;
     transform:translateY(-50%);
 }
 .carousel-caption h1{
@@ -69,6 +80,47 @@ html,body{
 .padding{
     padding-bottom: 2rem;
 }
+
+
+.category img{
+    
+    transition: all 0.5s ease-in-out
+}
+
+.category h5{
+    position:relative;
+    top:40%;
+    font-size: 300%;
+    text-shadow:1px 1px 15px #000;
+    transition: all 0.5s ease-in-out;
+    
+}
+.category p{
+    position:relative;
+    top:20%;
+    font-size: 100%;
+    text-shadow: 1px 1px 10px #000;
+    padding-bottom:1rem; 
+    visibility: hidden;
+    opacity: 0;
+    transition: all 0.5s ease-in-out;
+}
+
+.category:hover p{
+    visibility: visible;
+    opacity: 1;
+}
+.category:hover h5{
+    top:25%;
+}
+.category:hover img{
+    opacity:0.5;
+}
+
+
+
+
+
 
 .social a{
     font-size: 4.5em;
@@ -130,7 +182,63 @@ hr.light-100{
         font-size: 4em;
         padding: 2rem;
     }
+    
+.carousel-caption{
+    
+    top:45%;
+ 
+}
+.carousel-caption h1{
+    font-size: 400%;
+    text-transform: uppercase;
+    text-shadow:1px 1px 15px #000;
+}
 
+.carousel-caption h3{
+    font-size: 150%;
+    font-weight: 500;
+    text-shadow: 1px 1px 10px #000;
+    padding-bottom:1rem;
+}    
+  
+.category img{
+    transition: all 0.5s ease-in-out
+}
+
+.category h5{
+    position:relative;
+    top:40%;
+    font-size: 115%;
+    text-shadow:1px 1px 10px #000;
+    transition: all 0.5s ease-in-out;
+    
+}
+.category p{
+    position:relative;
+    top:20%;
+    font-size: 80%;
+    text-shadow: 1px 1px 10px #000;
+    padding-bottom:1rem; 
+    visibility: hidden;
+    opacity: 0;
+    transition: all 0.5s ease-in-out;
+}
+
+.category:hover p{
+    visibility: visible;
+    opacity: 1;
+}
+.category:hover h5{
+    top:25%;
+}
+.category:hover img{
+    opacity:0.5;
+}  
+  
+  
+  
+  
+    
     
 }
 
@@ -138,21 +246,21 @@ hr.light-100{
 
 @media (max-width:768px){
 .carousel-caption{
-    top:45%;
+    top:42%;
 }
 .carousel-caption h1{
-    font-size: 350%
+    font-size: 300%
 }
 
 .carousel-caption h3{
-    font-size: 140%;
-    font-weight: 400;
+    font-size: 120%;
+    font-weight: 300;
     padding-bottom:.2rem;
 }
 
 .carousel-caption .btn{
     font-size: 95%;
-    padding:8px 14px;
+    padding:4px 8px;
     
 }
 
@@ -164,6 +272,46 @@ hr.light-100{
 font-size: 2.5em;
 padding:1.2rem;
 }
+
+
+.category img{
+    transition: all 0.5s ease-in-out
+}
+
+.category h5{
+    position:relative;
+    top:45%;
+    font-size: 130%;
+    text-shadow:1px 1px 10px #000;
+    transition: all 0.5s ease-in-out;
+    
+}
+.category p{
+    position:relative;
+    top:35%;
+    font-size: 75%;
+    text-shadow: 1px 1px 10px #000;
+    padding-bottom:1rem; 
+    visibility: hidden;
+    opacity: 0;
+    transition: all 0.5s ease-in-out;
+}
+
+.category:hover p{
+    visibility: visible;
+    opacity: 1;
+}
+.category:hover h5{
+    top:37%;
+}
+.category:hover img{
+    opacity:0.5;
+} 
+
+
+
+
+
 }
     
 @media (max-width:576px){
@@ -189,6 +337,45 @@ padding:1.2rem;
 font-size: 2em;
 padding:.7rem;
 }
+    
+    
+.category img{
+    transition: all 0.5s ease-in-out
+}
+
+.category h5{
+    position:relative;
+    top:40%;
+    font-size: 200%;
+    text-shadow:1px 1px 10px #000;
+    transition: all 0.5s ease-in-out;
+    
+}
+.category p{
+    position:relative;
+    top:20%;
+    font-size: 100%;
+    text-shadow: 1px 1px 10px #000;
+    padding-bottom:1rem; 
+    visibility: hidden;
+    opacity: 0;
+    transition: all 0.5s ease-in-out;
+}
+
+.category:hover p{
+    visibility: visible;
+    opacity: 1;
+}
+.category:hover h5{
+    top:27%;
+}
+.category:hover img{
+    opacity:0.5;
+}     
+    
+    
+    
+    
     
 }
 

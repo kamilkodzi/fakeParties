@@ -13,7 +13,8 @@ const   express                 =require('express'),
         flash                   =require('connect-flash-plus'),
         session                 =require('express-session'),
         moment                  =require('moment'),
-        seedDB                  =require('./seed.js');
+        seedDB                  =require('./seed.js'),
+        cloudinary              =require('cloudinary').v2;
         
 const   indexRoutes             =require('./routes/index'),
         eventsRoutes            =require('./routes/events'),
@@ -22,7 +23,7 @@ const   indexRoutes             =require('./routes/index'),
 const   url=process.env.DATABASEURL || 'mongodb://localhost/fake7';
 
 mongoose.connect(url);
-app.locals.moment=moment;
+
 app.set("view engine","ejs");
 app.use(express.static(__dirname+"/public"));
 app.use(bodyParser.urlencoded({extended: true}));
@@ -47,6 +48,8 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
  
 app.use(function(req,res,next){
+    res.locals.moment=moment;
+    res.locals.cloudinary = cloudinary;
     res.locals.currentUser=req.user;
     res.locals.error=req.flash("error");
     res.locals.success=req.flash("success");

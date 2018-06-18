@@ -1,51 +1,38 @@
 <% include ../partials/header %>
 
-    <div class="row d-none d-sm-block">
-        <div id="carouselSlides" class="carousel slide" data-ride="carousel">
-          <div class="carousel-inner">
-            <div class="carousel-item active" style="">
-              <img class="d-block w-100" src="img/caruselSlide/carusel1.jpg" alt="First slide">
-            </div>
-            <div class="carousel-item">
-              <img class="d-block w-100" src="img/caruselSlide/carusel2.jpg" alt="Second slide">
-            </div>
-            <div class="carousel-item">
-              <img class="d-block w-100" src="img/caruselSlide/carusel3.jpg" alt="Third slide">
-            </div>
-          </div>
-        </div>
-    </div>
-    
 <div class="container-fluid">
-    
-<div class="row">
-    <div class="col jumbotron jumbotron-fluid mt-1">
-      <h1 class="display-4">Best events over the World!</h1>
-      <p>It never was so easy. Type what bring you joy and we`ll find it!</p>
+<div class="row jumbotron">
+    <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9 col-xl-10 mx-auto">
+      <p class="lead text-center">It never was so easy. Type what bring you joy and we`ll find it!</p>
     <div class="row">
         <form action="/show" class="col" method="GET">
         <div class="form-group">
           <div class="input-group">
-            <input type="text" class="col-md-6 col-sm-12 form-control" placeholder="Parties or categories" name="event" value="<%=field1%>">
-            <input class="form-control" id="autocomplete" placeholder="Enter your address" onfocus="geolocate()" type="text" name="location"value="<%=field2%>"></input>
-            <input type="number" class="col-md-3 form-control d-none d-sm-block" placeholder="How far we are looking" name="kmNumber" value="<%=field3%>">
-            <button class="primary">Find</button>
+            <input type="text" class="col-md-6 col-sm-12 form-control" placeholder="Find me" name="event">
+            <input class="col-md-3 form-control d-none d-sm-block" id="autocomplete" placeholder="City" onfocus="geolocate()" type="text" name="location">
+            <input type="number" class="col-md-3 form-control d-none d-sm-block" placeholder="100 km" name="kmNumber">
+            <button class=" btn btn-outline-secondary btn-lg">Find</button>
           </div>
         </div> 
         </form>
     </div>
     </div>  
 </div>
-    
-    <div class="row mt-3">
+</div>
+ 
+ <div class="container-fluid">
+    <div class="row mt-3 text-center padding">
+      <div class="col-12 padding">
+        <h2>Lastest Events</h2>
+      </div>
         <% events.forEach(function(events){ %>
-         <div class="col-md-4 mb-2">
+         <div class="col-md-4 mb-2 mx-auto event">
            <a href="/events/<%=events._id%>">
             <div class="card bg-dark text-white">
-              <img class="card-img" src="<%= events.image %>" alt="image">
+            <%-cloudinary.image(events.cloudId, {width: 286, height: 180, crop: 'fill',quality: 80,format:'jpg',class:'card-img'})%>
               <div class="card-img-overlay">
                 <h5 class="card-title text-center font-weight-bold"><%= events.name %></h5>
-                <p class="card-text text-justify"><%= events.description.substr(0,80) %> . . .</p>
+                <p class="card-text text-justify">Event begin in <%= moment(events.dateFrom).endOf('day').fromNow() %> and they say: <span class="font-italic"><%= events.description.substr(0,80) %> . . .</span></p>
               </div>
             </div>
             </a>
@@ -54,21 +41,60 @@
     </div>
 </div>
 
+<div class="container-fluid">
+  
     <div class="row mt-3">
+      
+      <div class="col-12 padding text-center">
+        <hr class="my-4"> 
+        <h2>Category</h2>
+      </div>
         <% category.forEach(function(category){ %>
-         <div class="col-md-4 mb-2">
-           
-            <div class="card bg-dark text-white">
+          <div class="col-md-4 mb-2 padding category">
+          <div class="curtain"> 
+          <a href="/show?event=<%=category.categoryName%>&location=&kmNumber=">
+            <div class="card bg-dark text-white text-center">
               <img class="card-img" src="<%= category.imgUrl %>" alt="image">
               <div class="card-img-overlay">
-                <h5 class="card-title text-center font-weight-bold"><%= category.categoryName %></h5>
+                <h5 class="card-title font-weight-bold"><%= category.categoryName %></h5>
+                <p class="card-text"><%= category.somethingAbout %></p>
               </div>
             </div>
-            
+         </a>
+         </div>
          </div>
         <% }); %> 
     </div>
+    <hr class="my-4">
 </div>
+
+<div class="container-fluid">
+<div class="row text-center padding">
+  <div class="col-12">
+    <h2>Connect</h2>
+  </div>
+  <div class="col-12 social">
+    <a href="#"><i class="fab fa-facebook"></i></a>
+    <a href="#"><i class="fab fa-twitter"></i></a>
+    <a href="#"><i class="fab fa-google-plus-g"></i></a>
+    <a href="#"><i class="fab fa-instagram"></i></a>
+    <a href="#"><i class="fab fa-youtube"></i></a>
+  </div>
+</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
