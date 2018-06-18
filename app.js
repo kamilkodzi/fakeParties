@@ -20,7 +20,7 @@ const   indexRoutes             =require('./routes/index'),
         eventsRoutes            =require('./routes/events'),
         searchRoutes            =require('./routes/show');
 
-const   url=process.env.DATABASEURL|| 'mongodb://localhost/fake7';
+const   url=process.env.DATABASEURL || 'mongodb://localhost/fake';
 
 mongoose.connect(url);
 
@@ -61,6 +61,6 @@ app.use(indexRoutes);
 app.use("/show",searchRoutes);
 app.use("/events" ,eventsRoutes);
  
-app.listen(process.env.PORT,process.env.IP,function(){
+app.listen(process.env.PORT||3000,process.env.IP,function(){
     console.log('fakeServer has started');
 });
