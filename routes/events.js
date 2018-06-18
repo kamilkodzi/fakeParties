@@ -17,7 +17,8 @@ const   options = {
 
 const   imageFilter = function (req, file, cb) {
         // accept image files only
-            if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/i)) {
+            if (!file.originalname.match(/\.(jpg|jpeg|png|gif|jfif)$/i)) {
+                req.fileValidationError = 'Please add jpg,jpeg,png,gif file';
                 return cb(new Error('Only image files are allowed!'), false);
             }
         cb(null, true)},
@@ -27,8 +28,6 @@ const   imageFilter = function (req, file, cb) {
             callback(null, Date.now() + file.originalname);
           }
         }),
-        
-        
         
         upload = multer({storage: storage, fileFilter: imageFilter});
 
@@ -82,11 +81,10 @@ router.get('/:id/edit',middleware.checkEventOwnership,(req,res)=>{
 });
 
 // Create new Event
-router.post('/', middleware.isLoggedIn,upload.single('image'),(req,res)=>{
-    console.log(req.file.path);
+router.post('/', middleware.isLoggedIn,upload.single('image'),(req,res,err)=>{
+  
     Category.findById(req.body.category,(err,foundCategory)=>{
         const   name        = req.body.name,
-                // location    = req.body.location,
                 desc        = req.body.description,
                 dateFrom    = req.body.dateFrom,
                 dateTo      = req.body.dateTo,
@@ -132,53 +130,75 @@ router.post('/', middleware.isLoggedIn,upload.single('image'),(req,res)=>{
             });  
         });
     });
+    
+    
 });
 
-// // Update
-// router.put('/:id',(req,res)=>{
-//     Event.findByIdAndUpdate(req.params.id,req.body.event,(err,updatedEvent)=>{
-//       if(err){
-//           res.redirect('/');
-//       }else{
-//           res.redirect('/events/'+req.params.id);
-//       }
-//     });
-// });
 
-
-// UPDATE CAMPGROUND ROUTE
-router.put("/:id", middleware.checkEventOwnership, function(req, res){
-  geocoder.geocode(req.body.location, function (err, data) {
-    if (err || !data.length) {
-      req.flash('error', 'Invalid address');
-      return res.redirect('back');
-    }
-    req.body.event.locationCity=data[0].city;
-    req.body.event.geometry= {
-        type: 'Point',
-        coordinates: [data[0].longitude, data[0].latitude]},
-    req.body.event.location = data[0].formattedAddress;
-
-    Event.findByIdAndUpdate(req.params.id, req.body.event, function(err, foundEvent){
-        if(err){
-            req.flash("error", err.message);
-            res.redirect("back");
-        } else {
-            req.flash("success","Successfully Updated!");
-            res.redirect("/events/" + foundEvent._id);
-        }
+// Update event
+router.put("/:id", middleware.checkEventOwnership,upload.single('image'), function(req, res){
+    Event.findById(req.params.id,(err,foundEvent)=>{
+    if(err){
+        req.flash('error',err.message);
+        return res.redirect('back')}    
+    
+          geocoder.geocode(req.body.location, function (err, data) {
+            if (err || !data.length) {
+              req.flash('error', 'Invalid address');
+              return res.redirect('back');
+            }
+            foundEvent.locationCity=data[0].city;
+            foundEvent.geometry= {
+                type: 'Point',
+                coordinates: [data[0].longitude, data[0].latitude]},
+            foundEvent.location = data[0].formattedAddress;
+        
+        
+            if(req.file){
+                console.log(foundEvent.cloudId);
+                cloudinary.v2.uploader.destroy(foundEvent.cloudId,(err)=>{
+                    if(err){
+                    req.flash('error',err.message);
+                    return res.redirect('back')}   
+                        cloudinary.v2.uploader.upload(req.file.path,(err,result)=>{
+                            if(err){
+                            req.flash('error',err.message);
+                            return res.redirect('back')}    
+                            
+                            foundEvent.image=result.secure_url;
+                            foundEvent.cloudId=result.public_id;
+                            foundEvent.dateFrom=req.body.event.dateFrom;
+                            foundEvent.dateTo=req.body.event.dateTo;
+                            
+                            foundEvent.name=req.body.event.name;
+                            foundEvent.description=req.body.event.description;
+                            foundEvent.category=req.body.category;
+                            foundEvent.save();
+                            req.flash("success","Successfully Updated!");
+                            res.redirect("/events/" + foundEvent._id);
+                        });
+                });
+            }
+          });
     });
-  });
 });
 
 // Destroy
 router.delete('/:id',middleware.checkEventOwnership,(req,res)=>{
-    Event.findByIdAndRemove(req.params.id,(err)=>{
-      if(err){
-          res.redirect('/');
-      } else{
-          res.redirect('/');
-      }
+    Event.findById(req.params.id,(err,foundEvent)=>{
+     if(err){
+        req.flash('error',err.message);
+        return res.redirect('back')}   
+    try{
+       cloudinary.v2.uploader.destroy(foundEvent.cloudId,()=>{
+          foundEvent.remove();
+          req.flash("success","Event deleted successfully!");
+          res.redirect("/"); 
+       });
+    }catch(err){
+       req.flash('error',err.message);
+       return res.redirect('back');  
+    }
     });
 });
 

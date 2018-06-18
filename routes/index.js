@@ -14,7 +14,7 @@ router.get('/',(req,res)=>{
       } else{
           res.render("index",{events:topEvents,category:foundCategories});
       }
-    }).sort({_id:1}).limit(6);
+    }).sort({_id:-1}).limit(6);
   });
 });
 
@@ -89,7 +89,7 @@ router.get("/users/:id",(req,res)=>{
             req.flash("error","No user found");
             res.redirect("/");
         }else{
-            Events.find().where("author.id").equals(foundUser._id).exec((err,events)=>{
+            Events.find().where("author.id").equals(foundUser._id).sort('dateFrom').exec((err,events)=>{
                 if(err){
                     req.flash("error","No user found");
                     res.redirect("back");
